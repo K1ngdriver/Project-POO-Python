@@ -13,19 +13,37 @@ def get_weather(city):
         print(f'Erro na requisição: {err}')
         return None
 
+def print_header(title):
+    print(f"\n{'-'*len(title)}")
+    print(title)
+    print(f"{'-'*len(title)}\n")
+
 def display_weather(weather_data):
+    print_header("Previsão para a Semana")
+    print(f"{'Data e Hora':^20} | {'Temperatura (°C)':^20} | {'Descrição':^30}")
+    print("-"*72)
     for entry in weather_data['list']:
         date_time = entry['dt_txt']
         temperature = entry['main']['temp']
-        description = entry['weather'][0]['description']
-        print(f'{date_time}: {temperature}°C, {description.capitalize()}')
+        description = entry['weather'][0]['description'].capitalize()
+        print(f"{date_time:^20} | {temperature:^20} | {description:^30}")
+    print("-"*72)
 
 def get_specific_date_weather(weather_data, date):
+    print_header(f"Previsão para {date}")
+    found = False
     for entry in weather_data['list']:
         if date in entry['dt_txt']:
+            found = True
+            date_time = entry['dt_txt']
             temperature = entry['main']['temp']
-            description = entry['weather'][0]['description']
-            print(f'{entry["dt_txt"]}: {temperature}°C, {description.capitalize()}')
+            description = entry['weather'][0]['description'].capitalize()
+            print(f"{'Data e Hora':^20} | {'Temperatura (°C)':^20} | {'Descrição':^30}")
+            print("-"*72)
+            print(f"{date_time:^20} | {temperature:^20} | {description:^30}")
+            print("-"*72)
+    if not found:
+        print("Nenhuma previsão encontrada para a data especificada.")
 
 def main():
     while True:
