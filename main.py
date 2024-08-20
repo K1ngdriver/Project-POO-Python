@@ -1,5 +1,4 @@
 import requests
-from datetime import datetime
 
 API_KEY = '9de303f7f5123a36fc14d38a060cde6e'
 BASE_URL = 'http://api.openweathermap.org/data/2.5/forecast'
