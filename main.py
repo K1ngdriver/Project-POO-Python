@@ -9,7 +9,7 @@ def get_weather(city):
         response.raise_for_status()
         return response.json()
     except requests.exceptions.HTTPError as err:
-        print(f'Erro na requisição: {err}')
+        print(f'Erro na requisição: {city}. Verifique o nome da cidade e tente novamente.')
         return None
 
 def print_header(title):
@@ -18,7 +18,6 @@ def print_header(title):
     print(f"{'-'*len(title)}\n")
 
 def check_for_alerts(temperature, rain_chance):
-    """Função para verificar e exibir alertas de temperatura e chuva"""
     alerts = []
     
     if temperature <= 15:
@@ -54,8 +53,8 @@ def get_specific_date_weather(weather_data, date):
             date_time = entry['dt_txt']
             temperature = entry['main']['temp']
             description = entry['weather'][0]['description'].capitalize()
-            rain_chance = entry.get('pop', 0)  # 'pop' representa a probabilidade de precipitação
-            rain_percentage = rain_chance * 100  # Transformando em porcentagem
+            rain_chance = entry.get('pop', 0)
+            rain_percentage = rain_chance * 100
             alert = check_for_alerts(temperature, rain_chance)
             print(f"{'Data e Hora':^20} | {'Temperatura (°C)':^20} | {'Descrição':^30} | {'Chance de Chuva (%)':^20} | {'Alerta':^30}")
             print("-"*132)
@@ -83,9 +82,20 @@ def main():
             else:
                 print("Opção inválida. Tente novamente.")
         
-        repeat = input('\nDeseja fazer outra consulta? (s/n): ').lower()
-        if repeat != 's':
-            break
+        while True:
+            try:
+                repeat = input('\nDeseja fazer outra consulta? (s/n): ').lower()
+                if repeat not in ['s', 'n']:
+                    print("Entrada inválida. Por favor, digite 's' para sim ou 'n' para não.")
+                else:
+                    break  # Sai do loop se a entrada for válida
+            except Exception as e:
+                print(f"Ocorreu um erro ao tentar repetir a consulta: {e}")
+                print("Encerrando o programa.")
+                break
 
+        if repeat == 'n':
+            print("Encerrando o programa.")
+            break
 if __name__ == "__main__":
     main()
